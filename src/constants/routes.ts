@@ -3,9 +3,21 @@ export const ROUTES = {
   login: "/login",
   register: "/register",
   forgotPassword: "/forgot-password",
+  /** Smart entry point: opens the last-used mess, or the messes hub. */
   dashboard: "/dashboard",
   verifyEmail: "/verify-email",
+  messes: "/messes",
+  newMess: "/messes/new",
+  join: "/join",
+  invite: (token: string) => `/invite/${token}`,
 } as const;
+
+/** Mess-scoped pages live under /m/<slug>. */
+export const messRoutes = (slug: string) => ({
+  overview: `/m/${slug}`,
+  members: `/m/${slug}/members`,
+  settings: `/m/${slug}/settings`,
+});
 
 /** Where logged-in users land by default. */
 export const DEFAULT_AUTHENTICATED_ROUTE = ROUTES.dashboard;

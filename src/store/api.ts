@@ -46,7 +46,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
  * Cache tags. Mutations invalidate exactly what they change, scoped by id
  * (`{ type: "Bazar", id }` plus `{ type: "Bazar", id: "LIST" }`), see FRONTEND_GUIDE §3.
  */
-export const TAG_TYPES = ["Me"] as const;
+export const TAG_TYPES = ["Me", "Mess", "MessSettings", "Members", "Invitations"] as const;
 
 /** Builds a mess-scoped endpoint path: `messUrl(messId, "/bazars")` → `/messes/<id>/bazars`. */
 export const messUrl = (messId: string, path = "") => `/messes/${messId}${path}`;

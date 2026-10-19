@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { DashboardHome } from "@/features/dashboard/components/dashboard-home";
+import { DashboardRedirect } from "@/features/messes/components/dashboard-redirect";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
 export default function DashboardPage() {
-  return <DashboardHome />;
+  return <DashboardRedirect />;
 }

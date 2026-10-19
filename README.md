@@ -48,12 +48,17 @@ E2E tests need the API running. Start it with a raised auth rate limit, since th
 src/
   app/                      # routing only: layouts, pages, metadata
     (auth)/                 # guest-only: login, register, forgot-password
-    (app)/                  # logged-in: dashboard, verify-email
+    (app)/                  # logged-in: dashboard (redirect), messes hub, create, join, verify-email
+      m/[slug]/             # one mess: overview, members, settings
+    invite/[token]/         # public invitation landing
   components/
     ui/                     # shadcn-style primitives on Radix: Button, Input, Form, Dialog, Sheet, ...
     common/                 # app patterns: PageHeader, EmptyState, DataTable, MoneyText, StatusBadge, ...
     layout/                 # app shell: Sidebar, TopBar, BottomNav, UserMenu
   features/
+    messes/                 # messes API, create wizard, hub, overview, settings, MessScope, permissions
+    members/                # members API, members page and actions
+    invitations/            # invitations API, invite dialog, invitation landing
     auth/
       auth-api.ts           # RTK Query endpoints (injectEndpoints)
       auth-slice.ts         # Redux slice
@@ -61,7 +66,6 @@ src/
       components/           # forms, RequireAuth, RequireGuest
       hooks/                # useAuthStatus
       utils.ts
-    dashboard/components/
   store/                    # store setup, root API slice (with token refresh), typed hooks
   providers/                # Redux, nuqs, theme, tooltips, toasts
   constants/                # route paths, navigation

@@ -6,13 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import type { NavItem } from "@/constants/navigation";
 import { cn } from "@/lib/cn";
 
-export const isActivePath = (pathname: string, href?: string) =>
-  !!href && (pathname === href || pathname.startsWith(`${href}/`));
+export const isActivePath = (pathname: string, item: Pick<NavItem, "href" | "exact">) =>
+  !!item.href && (pathname === item.href || (!item.exact && pathname.startsWith(`${item.href}/`)));
 
 /** A sidebar / "More" sheet row. */
 export function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const active = isActivePath(pathname, item.href);
+  const active = isActivePath(pathname, item);
   const Icon = item.icon;
 
   const classes = cn(

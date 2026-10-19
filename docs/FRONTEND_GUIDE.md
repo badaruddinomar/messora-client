@@ -9,7 +9,7 @@ src/
   app/                       # routing only: layout.tsx, page.tsx, loading.tsx, error.tsx, metadata
     (auth)/                  # guest-only pages
     (app)/                   # logged-in pages
-      m/[slug]/...           # mess-scoped pages (from Phase 2), e.g. /m/green-house/meals
+      m/[slug]/...           # mess-scoped pages, e.g. /m/green-house/members
   components/
     ui/                      # shadcn primitives (Button, Input, Dialog, ...)
     common/                  # app-level patterns (PageHeader, EmptyState, MoneyText, DataTable, ...)
@@ -48,6 +48,18 @@ when it is, as long as the result is adapted to our tokens.
 - Pages and layouts are Server Components by default. Add `"use client"` only to the component that needs state, effects, browser APIs or Redux, and push it as far down the tree as possible.
 - Cache Components is enabled. Anything that reads the URL on the client (nuqs, `useSearchParams`) must sit under a `<Suspense>` boundary, or the build fails.
 - Before using a Next.js API you haven't used in this project yet, read its guide in `node_modules/next/dist/docs/` (this Next.js version has breaking changes).
+
+## 2a. Mess-scoped pages
+
+- Every page about one mess lives under `app/(app)/m/[slug]/`. The `[slug]` layout wraps them in `<MessScope>`,
+  which resolves the mess from the URL and shows loading, "not found", "waiting for approval" and "suspended" states.
+  Pages under it can assume an active membership.
+- Inside those pages, `useCurrentMess()` returns the mess and `useMessPermissions()` returns `{ isAdmin, canManage }`.
+  Use them to hide or disable actions (the API enforces the same rules, BUSINESS_RULES §2).
+- Code outside the mess pages (the sidebar, bottom nav, mess switcher) uses `useMessFromRoute()` instead, which reads
+  the slug from the URL and the mess from the cached `myMesses` query.
+- Navigation comes from `buildNavigation(slug)` in `constants/navigation.ts`; give an item an `href` when its feature ships.
+- Build mess URLs with `messRoutes(slug)` (pages) and `messUrl(messId, path)` (API).
 
 ## 3. Data fetching (RTK Query)
 

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ellipsis } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { MOBILE_NAV_ITEMS, NAVIGATION, type NavItem } from "@/constants/navigation";
+import { buildNavigation, type NavItem } from "@/constants/navigation";
+import { useMessFromRoute } from "@/features/messes/hooks/use-mess-from-route";
 import { cn } from "@/lib/cn";
 import { MessSwitcher } from "./mess-switcher";
 import { isActivePath, NavLink } from "./nav-link";
@@ -17,6 +18,8 @@ const itemClasses =
 export function BottomNav() {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
+  const { slug } = useMessFromRoute();
+  const items = buildNavigation(slug).flatMap((s) => s.items);
 
   return (
     <>
@@ -24,9 +27,11 @@ export function BottomNav() {
         aria-label="Main"
         className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
       >
-        {MOBILE_NAV_ITEMS.map((item) => (
-          <BottomNavItem key={item.label} item={item} active={isActivePath(pathname, item.href)} />
-        ))}
+        {items
+          .filter((i) => i.mobile)
+          .map((item) => (
+            <BottomNavItem key={item.label} item={item} active={isActivePath(pathname, item)} />
+          ))}
         <button
           type="button"
           onClick={() => setMoreOpen(true)}
@@ -45,7 +50,7 @@ export function BottomNav() {
           <SheetTitle className="sr-only">Menu</SheetTitle>
           <MessSwitcher />
           <div className="grid gap-1">
-            {NAVIGATION.flatMap((s) => s.items)
+            {items
               .filter((i) => !i.mobile)
               .map((item) => (
                 <NavLink key={item.label} item={item} onNavigate={() => setMoreOpen(false)} />

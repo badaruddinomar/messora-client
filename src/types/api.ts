@@ -22,7 +22,14 @@ export type ApiErrorCode =
   | "NOT_A_MEMBER"
   | "MEMBERSHIP_INACTIVE"
   | "INSUFFICIENT_ROLE"
-  | "MONTH_CLOSED";
+  | "INVALID_JOIN_CODE"
+  | "ALREADY_MEMBER"
+  | "ALREADY_REQUESTED"
+  | "MEMBERSHIP_SUSPENDED"
+  | "INVITATION_INVALID"
+  | "MONTH_CLOSED"
+  | "LAST_ADMIN"
+  | "CONFIRMATION_MISMATCH";
 
 export interface ApiErrorBody {
   success: false;

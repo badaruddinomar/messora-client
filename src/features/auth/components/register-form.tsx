@@ -26,7 +26,7 @@ import { registerSchema, type RegisterValues } from "../auth-schemas";
 import { AuthHeading } from "./auth-heading";
 
 export function RegisterForm() {
-  const [, setNext] = useQueryState("next", parseAsString);
+  const [next, setNext] = useQueryState("next", parseAsString);
   const [registerUser, { isLoading }] = useRegisterMutation();
   // Only errors that couldn't be shown on a field go in the alert.
   const [formError, setFormError] = useState<RequestError>();
@@ -38,9 +38,9 @@ export function RegisterForm() {
 
   const onSubmit = form.handleSubmit(async (values) => {
     setFormError(undefined);
-    // <RequireGuest> redirects once the session exists; users who gave an email
-    // go straight to entering the code we just sent them.
-    if (values.email) await setNext(ROUTES.verifyEmail);
+    // <RequireGuest> redirects once the session exists. Users who gave an email go straight to
+    // entering the code we just sent them, unless they came from somewhere (e.g. an invite link).
+    if (values.email && !next) await setNext(ROUTES.verifyEmail);
     const res = await registerUser(values);
     if (res.error && !applyFieldErrors(res.error, form.setError)) setFormError(res.error);
   });

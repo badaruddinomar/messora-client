@@ -13,8 +13,13 @@ interface ConfirmDialogProps {
   confirmLabel: string;
   cancelLabel?: string;
   destructive?: boolean;
-  /** May be async; the dialog shows a pending state and closes when it resolves. */
+  /**
+   * May be async; the dialog shows a pending state and closes when it resolves.
+   * If it throws, the dialog stays open (the caller shows the error).
+   */
   onConfirm: () => unknown | Promise<unknown>;
+  /** Extra content between the description and the buttons, e.g. a reason field. */
+  children?: ReactNode;
 }
 
 /** Confirmation for destructive or irreversible actions. */
@@ -27,6 +32,7 @@ export function ConfirmDialog({
   cancelLabel = "Cancel",
   destructive = false,
   onConfirm,
+  children,
 }: ConfirmDialogProps) {
   const [pending, setPending] = useState(false);
 
@@ -35,6 +41,8 @@ export function ConfirmDialog({
     try {
       await onConfirm();
       onOpenChange(false);
+    } catch {
+      // Stay open so the user can retry; the caller reports the error.
     } finally {
       setPending(false);
     }
@@ -56,6 +64,8 @@ export function ConfirmDialog({
           </Button>
         </>
       }
-    />
+    >
+      {children}
+    </ResponsiveDialog>
   );
 }

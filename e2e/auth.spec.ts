@@ -26,7 +26,8 @@ async function logout(page: Page) {
 
 test("guests are sent to login, then back to where they were going", async ({ page }) => {
   const { phone } = await register(page);
-  await expect(page).toHaveURL(/\/dashboard/);
+  // Without a mess yet, the dashboard sends people to the messes hub.
+  await expect(page).toHaveURL(/\/messes$/);
   await logout(page);
 
   await page.goto("/verify-email");
@@ -62,21 +63,21 @@ test("the session survives a reload and silently refreshes an expired access tok
   context,
 }) => {
   await register(page);
-  await expect(page.getByRole("heading", { name: /Hi, Karim/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Welcome, Karim/ })).toBeVisible();
 
   await page.reload();
-  await expect(page.getByRole("heading", { name: /Hi, Karim/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Welcome, Karim/ })).toBeVisible();
 
   await context.clearCookies({ name: "access_token" });
   await page.goto("/dashboard");
-  await expect(page.getByRole("heading", { name: /Hi, Karim/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Welcome, Karim/ })).toBeVisible();
 });
 
 test("logged-in users can't open the auth pages", async ({ page }) => {
   await register(page);
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page).toHaveURL(/\/messes$/);
   await page.goto("/login");
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page).toHaveURL(/\/messes$/);
 });
 
 test("the theme can be switched from the account menu", async ({ page }) => {
