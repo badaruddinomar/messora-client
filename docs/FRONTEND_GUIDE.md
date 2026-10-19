@@ -60,6 +60,9 @@ when it is, as long as the result is adapted to our tokens.
   the slug from the URL and the mess from the cached `myMesses` query.
 - Navigation comes from `buildNavigation(slug)` in `constants/navigation.ts`; give an item an `href` when its feature ships.
 - Build mess URLs with `messRoutes(slug)` (pages) and `messUrl(messId, path)` (API).
+- Screens that show one billing month (meals, bazar, deposits…) use `<MonthPicker>` and `useSelectedMonth()` from
+  `features/months`; the month lives in the URL as `?month=2026-10`. When `isMonthEditable(month)` is false, show
+  `<MonthReadOnlyBanner>` and disable every action.
 
 ## 3. Data fetching (RTK Query)
 

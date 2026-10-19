@@ -24,6 +24,7 @@ export const membersApi = api.injectEndpoints({
         url: messUrl(messId, `/members/${memberId}/approve`),
         method: "POST",
       }),
+      transformResponse: (res: ApiResponse<Member>) => res.data,
       invalidatesTags: (_r, _e, { messId }) => [membersTag(messId), { type: "Mess", id: messId }],
     }),
 
@@ -41,6 +42,7 @@ export const membersApi = api.injectEndpoints({
         method: "PATCH",
         body: { role },
       }),
+      transformResponse: (res: ApiResponse<Member>) => res.data,
       invalidatesTags: (_r, _e, { messId }) => [membersTag(messId), { type: "Mess", id: messId }],
     }),
 
@@ -49,6 +51,7 @@ export const membersApi = api.injectEndpoints({
         url: messUrl(messId, `/members/${memberId}/${suspended ? "suspend" : "reactivate"}`),
         method: "POST",
       }),
+      transformResponse: (res: ApiResponse<Member>) => res.data,
       invalidatesTags: (_r, _e, { messId }) => [membersTag(messId), { type: "Mess", id: messId }],
     }),
 

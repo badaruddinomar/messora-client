@@ -1,6 +1,6 @@
 import {
   CalendarCheck,
-  ChartPie,
+  CalendarRange,
   House,
   LayoutGrid,
   Megaphone,
@@ -48,7 +48,7 @@ export function buildNavigation(slug: string | null): NavSection[] {
         { label: "Bazar", icon: ShoppingBasket, mobile: true },
         { label: "Deposits", icon: Wallet },
         { label: "Expenses", icon: ReceiptText },
-        { label: "Month summary", icon: ChartPie },
+        { label: "Months", icon: CalendarRange, href: routes.months },
       ],
     },
     {

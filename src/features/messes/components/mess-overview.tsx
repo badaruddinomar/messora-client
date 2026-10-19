@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { format } from "date-fns";
 import {
   CalendarCheck,
   CalendarRange,
@@ -22,8 +23,10 @@ import { messRoutes } from "@/constants/routes";
 import { EmailVerificationBanner } from "@/features/auth/components/email-verification-banner";
 import { InviteDialog } from "@/features/invitations/components/invite-dialog";
 import { useMembersQuery } from "@/features/members/members-api";
+import { useMonthsQuery } from "@/features/months/months-api";
+import { daysLeft } from "@/features/months/utils";
 import { useCurrentMess, useMessPermissions } from "../mess-context";
-import { GENDER_LABELS, ordinal, ROLE_LABELS } from "../utils";
+import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
@@ -38,6 +41,8 @@ export function MessOverview() {
   const routes = messRoutes(mess.slug);
   const { data: members, isLoading } = useMembersQuery({ messId: mess.id });
   const { data: requests } = useMembersQuery({ messId: mess.id, status: "PENDING" }, { skip: !canManage });
+  const { data: months } = useMonthsQuery(mess.id);
+  const currentMonth = months?.find((m) => m.isCurrent);
 
   return (
     <div className="grid gap-8">
@@ -95,10 +100,19 @@ export function MessOverview() {
           helper={mess.membership.isMonthManager ? "Manager of this month" : "In this mess"}
         />
         <StatCard
-          label="Billing month"
+          label="This month"
           icon={CalendarRange}
-          value={ordinal(mess.monthStartDay)}
-          helper="Each billing month starts on this day"
+          value={currentMonth ? format(new Date(currentMonth.year, currentMonth.month - 1), "MMMM") : "–"}
+          helper={
+            currentMonth ? (
+              <Link href={routes.months} className="hover:text-foreground hover:underline">
+                {daysLeft(currentMonth)} days left
+                {currentMonth.manager ? ` · Managed by ${currentMonth.manager.name.split(" ")[0]}` : ""}
+              </Link>
+            ) : (
+              "Loading…"
+            )
+          }
         />
       </div>
 

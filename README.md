@@ -49,7 +49,7 @@ src/
   app/                      # routing only: layouts, pages, metadata
     (auth)/                 # guest-only: login, register, forgot-password
     (app)/                  # logged-in: dashboard (redirect), messes hub, create, join, verify-email
-      m/[slug]/             # one mess: overview, members, settings
+      m/[slug]/             # one mess: overview, members, months, settings
     invite/[token]/         # public invitation landing
   components/
     ui/                     # shadcn-style primitives on Radix: Button, Input, Form, Dialog, Sheet, ...
@@ -59,6 +59,7 @@ src/
     messes/                 # messes API, create wizard, hub, overview, settings, MessScope, permissions
     members/                # members API, members page and actions
     invitations/            # invitations API, invite dialog, invitation landing
+    months/                 # months API, months page, MonthPicker (?month=), status badge, read-only banner
     auth/
       auth-api.ts           # RTK Query endpoints (injectEndpoints)
       auth-slice.ts         # Redux slice
