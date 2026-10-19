@@ -4,6 +4,8 @@ Web app for **Messora** — mess management made simple.
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Redux Toolkit + RTK Query · Zod 4 + React Hook Form · nuqs · Tailwind CSS 4
 
+**Docs:** [Roadmap](docs/ROADMAP.md) · [Design system](docs/DESIGN_SYSTEM.md) · [Frontend guide](docs/FRONTEND_GUIDE.md)
+
 ## Getting started
 
 Start the API first ([messora-server](https://github.com/badaruddinomar/messora-server)), then:
