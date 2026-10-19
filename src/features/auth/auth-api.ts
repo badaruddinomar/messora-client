@@ -2,13 +2,17 @@ import { api } from "@/store/api";
 import type { ApiResponse } from "@/types/api";
 import type { User } from "@/types/user";
 import { loggedOut, userSet } from "./auth-slice";
-import type { ForgotPasswordValues, LoginValues, RegisterValues, ResetPasswordValues } from "./auth-schemas";
+import type { ForgotPasswordValues, LoginValues, RegisterValues } from "./auth-schemas";
 
 type SessionResponse = ApiResponse<{ user: User; accessToken: string }>;
 type MessageResponse = ApiResponse<null>;
 
 /** Stores the returned user in the auth slice once the request succeeds. */
-async function syncUser<T>(queryFulfilled: Promise<{ data: T }>, dispatch: (action: unknown) => unknown, pick: (data: T) => User) {
+async function syncUser<T>(
+  queryFulfilled: Promise<{ data: T }>,
+  dispatch: (action: unknown) => unknown,
+  pick: (data: T) => User,
+) {
   try {
     const { data } = await queryFulfilled;
     dispatch(userSet(pick(data)));
@@ -35,7 +39,8 @@ export const authApi = api.injectEndpoints({
 
     login: build.mutation<SessionResponse, LoginValues>({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
-      onQueryStarted: (_arg, { dispatch, queryFulfilled }) => syncUser(queryFulfilled, dispatch, (res) => res.data.user),
+      onQueryStarted: (_arg, { dispatch, queryFulfilled }) =>
+        syncUser(queryFulfilled, dispatch, (res) => res.data.user),
     }),
 
     register: build.mutation<SessionResponse, RegisterValues>({
@@ -44,7 +49,8 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: { ...rest, ...(email ? { email } : {}) },
       }),
-      onQueryStarted: (_arg, { dispatch, queryFulfilled }) => syncUser(queryFulfilled, dispatch, (res) => res.data.user),
+      onQueryStarted: (_arg, { dispatch, queryFulfilled }) =>
+        syncUser(queryFulfilled, dispatch, (res) => res.data.user),
     }),
 
     logout: build.mutation<MessageResponse, void>({
@@ -62,14 +68,15 @@ export const authApi = api.injectEndpoints({
 
     verifyEmail: build.mutation<ApiResponse<User>, { code: string }>({
       query: (body) => ({ url: "/auth/email/verify", method: "POST", body }),
-      onQueryStarted: (_arg, { dispatch, queryFulfilled }) => syncUser(queryFulfilled, dispatch, (res) => res.data),
+      onQueryStarted: (_arg, { dispatch, queryFulfilled }) =>
+        syncUser(queryFulfilled, dispatch, (res) => res.data),
     }),
 
     forgotPassword: build.mutation<MessageResponse, ForgotPasswordValues>({
       query: (body) => ({ url: "/auth/password/forgot", method: "POST", body }),
     }),
 
-    resetPassword: build.mutation<MessageResponse, Omit<ResetPasswordValues, "confirmPassword">>({
+    resetPassword: build.mutation<MessageResponse, { email: string; code: string; password: string }>({
       query: (body) => ({ url: "/auth/password/reset", method: "POST", body }),
     }),
   }),

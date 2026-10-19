@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { authReducer } from "@/features/auth/auth-slice";
 import { api } from "./api";
+import { errorToastMiddleware } from "./error-toast-middleware";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -12,7 +13,7 @@ const rootReducer = combineReducers({
 export const makeStore = () => {
   const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefault) => getDefault().concat(api.middleware),
+    middleware: (getDefault) => getDefault().concat(api.middleware, errorToastMiddleware),
   });
   setupListeners(store.dispatch);
   return store;

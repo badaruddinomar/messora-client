@@ -4,15 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert } from "@/components/ui/alert";
+import { CircleAlert, MailCheck } from "lucide-react";
+import { toast } from "sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { InputOTP } from "@/components/ui/input-otp";
+import { ROUTES } from "@/constants/routes";
 import { getErrorMessage } from "@/lib/api-error";
 import { useAppSelector } from "@/store/hooks";
 import { useSendEmailVerificationMutation, useVerifyEmailMutation } from "../auth-api";
 import { selectUser } from "../auth-slice";
 import { verifyCodeSchema, type VerifyCodeValues } from "../auth-schemas";
-import { ROUTES } from "@/constants/routes";
+import { AuthHeading } from "./auth-heading";
+import { ResendCodeButton } from "./resend-code-button";
 
 export function VerifyEmailForm() {
   const router = useRouter();
@@ -20,71 +25,91 @@ export function VerifyEmailForm() {
   const [verifyEmail, { isLoading, error }] = useVerifyEmailMutation();
   const [resend, resendState] = useSendEmailVerificationMutation();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<VerifyCodeValues>({ resolver: zodResolver(verifyCodeSchema) });
+  const form = useForm<VerifyCodeValues>({
+    resolver: zodResolver(verifyCodeSchema),
+    defaultValues: { code: "" },
+  });
 
   if (!user?.email) {
-    return <Alert tone="info">There&apos;s no email address on your account.</Alert>;
+    return (
+      <AuthHeading
+        title="No email address"
+        description="Your account doesn't have an email address to verify."
+      />
+    );
   }
 
   if (user.emailVerifiedAt) {
     return (
-      <div className="flex flex-col gap-4">
-        <Alert tone="success">{user.email} is verified.</Alert>
-        <Link href={ROUTES.dashboard} className="text-center text-sm font-medium text-primary hover:underline">
-          Go to dashboard
-        </Link>
+      <div className="flex flex-col items-center gap-4 text-center">
+        <span className="flex size-12 items-center justify-center rounded-full bg-success/10 text-success">
+          <MailCheck className="size-6" />
+        </span>
+        <AuthHeading title="Email verified" description={`${user.email} is verified.`} />
+        <Button asChild>
+          <Link href={ROUTES.dashboard}>Go to dashboard</Link>
+        </Button>
       </div>
     );
   }
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit = form.handleSubmit(async (values) => {
     const res = await verifyEmail(values);
-    if (!res.error) router.replace(ROUTES.dashboard);
+    if (!res.error) {
+      toast.success("Email verified");
+      router.replace(ROUTES.dashboard);
+    }
   });
 
+  const requestError = error ?? resendState.error;
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-      <div>
-        <h1 className="text-xl font-semibold">Verify your email</h1>
-        <p className="text-sm text-muted">
-          Enter the 6-digit code we sent to <span className="font-medium text-foreground">{user.email}</span>
-        </p>
-      </div>
-
-      {error && <Alert>{getErrorMessage(error)}</Alert>}
-      {resendState.isSuccess && <Alert tone="success">A new code is on its way.</Alert>}
-      {resendState.error && <Alert>{getErrorMessage(resendState.error)}</Alert>}
-
-      <Field
-        label="Verification code"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        maxLength={6}
-        error={errors.code?.message}
-        {...register("code")}
+    <>
+      <AuthHeading
+        title="Verify your email"
+        description={
+          <>
+            Enter the 6-digit code we sent to{" "}
+            <span className="font-medium text-foreground">{user.email}</span>.
+          </>
+        }
       />
+      <Form {...form}>
+        <form onSubmit={onSubmit} className="grid gap-5" noValidate>
+          {requestError && (
+            <Alert variant="destructive">
+              <CircleAlert />
+              <AlertDescription>{getErrorMessage(requestError)}</AlertDescription>
+            </Alert>
+          )}
 
-      <Button type="submit" loading={isLoading}>
-        Verify
-      </Button>
+          <FormField
+            control={form.control}
+            name="code"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Verification code</FormLabel>
+                <FormControl>
+                  {/* Submits on its own once all 6 digits are in. */}
+                  <InputOTP autoFocus onComplete={() => onSubmit()} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <div className="flex justify-between text-xs">
-        <Link href={ROUTES.dashboard} className="text-muted hover:underline">
-          Skip for now
-        </Link>
-        <button
-          type="button"
-          onClick={() => resend()}
-          disabled={resendState.isLoading}
-          className="text-primary hover:underline disabled:opacity-60"
-        >
-          Resend code
-        </button>
-      </div>
-    </form>
+          <Button type="submit" size="lg" loading={isLoading}>
+            Verify email
+          </Button>
+
+          <div className="flex items-center justify-between text-sm">
+            <Button variant="link" asChild className="text-muted-foreground hover:text-foreground">
+              <Link href={ROUTES.dashboard}>Skip for now</Link>
+            </Button>
+            <ResendCodeButton onResend={() => resend().unwrap()} initialCooldown={0} />
+          </div>
+        </form>
+      </Form>
+    </>
   );
 }

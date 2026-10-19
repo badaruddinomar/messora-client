@@ -24,12 +24,20 @@ src/
     utils.ts
   store/                     # store, root API slice, typed hooks
   providers/                 # Redux, nuqs, theme, toaster
-  constants/                 # routes, query keys, limits
+  constants/                 # routes, navigation, limits
+  hooks/                     # hooks shared across features (useMediaQuery, ...)
   lib/                       # framework-agnostic helpers (format, cn, errors)
   types/                     # types shared across features (User, ApiResponse, Money)
+  test/                      # Vitest setup
+e2e/                         # Playwright specs
 ```
 
+The `components/ui` primitives follow shadcn/ui's code and conventions (Radix + `cva` + `cn`). They were written by
+hand because the shadcn registry wasn't reachable from the build environment; `npx shadcn add <component>` works too
+when it is, as long as the result is adapted to our tokens.
+
 **Rules**
+
 - Files under `app/` stay thin: they read params, set metadata, and render a feature component.
 - A feature may import from `components/`, `lib/`, `store/`, `types/` and `constants/`. Avoid feature-to-feature imports; if two features need something, move it to a shared folder.
 - File names are kebab-case; components are PascalCase; hooks start with `use`.
@@ -52,13 +60,13 @@ src/
 
 ## 4. State: where does it live?
 
-| State | Where |
-| --- | --- |
-| Server data | RTK Query cache |
-| Shareable UI state: filters, tabs, selected month, pagination, wizard step | **URL with nuqs** |
-| Session (current user, auth status) | `auth` slice |
-| Truly global client UI (sidebar collapsed, theme) | small slice or next-themes |
-| Local UI (dialog open, hover) | `useState` |
+| State                                                                      | Where                      |
+| -------------------------------------------------------------------------- | -------------------------- |
+| Server data                                                                | RTK Query cache            |
+| Shareable UI state: filters, tabs, selected month, pagination, wizard step | **URL with nuqs**          |
+| Session (current user, auth status)                                        | `auth` slice               |
+| Truly global client UI (sidebar collapsed, theme)                          | small slice or next-themes |
+| Local UI (dialog open, hover)                                              | `useState`                 |
 
 ## 5. Forms
 
@@ -79,13 +87,19 @@ src/
 
 ## 7. Testing
 
-| Kind | Tool | What |
-| --- | --- | --- |
-| Unit | Vitest | formatters, hooks, utils, schema edge cases |
-| Component | Vitest + Testing Library | complex interactive components (meal grid, split preview, close wizard) |
-| End to end | Playwright | the critical flows: auth, create or join a mess, toggle meals, add and approve a bazar, close a month |
+| Kind       | Tool                     | What                                                                                                  |
+| ---------- | ------------------------ | ----------------------------------------------------------------------------------------------------- |
+| Unit       | Vitest                   | formatters, hooks, utils, schema edge cases                                                           |
+| Component  | Vitest + Testing Library | complex interactive components (meal grid, split preview, close wizard)                               |
+| End to end | Playwright               | the critical flows: auth, create or join a mess, toggle meals, add and approve a bazar, close a month |
 
-E2E tests run against a real API and a seeded database in CI.
+Unit and component tests live next to the code (`*.test.ts(x)`). E2E specs live in `e2e/` and run against the real
+API, on a desktop and a phone viewport. Flows that need an emailed code are covered by the server's integration tests.
+
+```bash
+npm test                 # unit + component tests
+npm run test:e2e         # e2e: start the API first (in messora-server: AUTH_RATE_LIMIT=1000 npm run dev)
+```
 
 ## 8. PR checklist
 

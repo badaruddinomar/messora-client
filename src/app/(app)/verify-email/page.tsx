@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Verify email" };
 
 export default function VerifyEmailPage() {
   return (
-    <div className="mx-auto w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-sm">
+    <div className="mx-auto w-full max-w-sm animate-in py-6 duration-300 fade-in-0 slide-in-from-bottom-2">
       <VerifyEmailForm />
     </div>
   );

@@ -12,17 +12,17 @@ The goal: Messora should feel **premium, calm and fast**, like a finance app peo
 
 ## 2. Stack
 
-| Need | Library |
-| --- | --- |
+| Need       | Library                                                                                |
+| ---------- | -------------------------------------------------------------------------------------- |
 | Components | **shadcn/ui** (copied into `src/components/ui`, built on Radix: accessible by default) |
-| Styling | Tailwind CSS 4 with design tokens (CSS variables) |
-| Icons | **lucide-react**, one icon set only |
-| Toasts | **sonner** |
-| Theme | **next-themes**: light, dark, system |
-| Animation | **motion** (`motion/react`), used sparingly |
-| Tables | **TanStack Table** (through a shared `DataTable`) |
-| Charts | **Recharts**, styled with our tokens (see §9) |
-| Dates | **date-fns** (+ `react-day-picker` for the date picker) |
+| Styling    | Tailwind CSS 4 with design tokens (CSS variables)                                      |
+| Icons      | **lucide-react**, one icon set only                                                    |
+| Toasts     | **sonner**                                                                             |
+| Theme      | **next-themes**: light, dark, system                                                   |
+| Animation  | **motion** (`motion/react`), used sparingly                                            |
+| Tables     | **TanStack Table** (through a shared `DataTable`)                                      |
+| Charts     | **Recharts**, styled with our tokens (see §9)                                          |
+| Dates      | **date-fns** (+ `react-day-picker` for the date picker)                                |
 
 Don't add a second library for something on this list.
 
@@ -30,17 +30,18 @@ Don't add a second library for something on this list.
 
 All colors come from CSS variables in `src/app/globals.css`, defined for light **and** dark. **Never** use raw Tailwind palette colors (`bg-emerald-500`, `text-gray-400`) or hex values in components; use the semantic tokens.
 
-| Token | Use |
-| --- | --- |
-| `background` / `foreground` | page background and default text |
-| `card` / `card-foreground` | surfaces (cards, sheets, popovers) |
-| `muted` / `muted-foreground` | subtle backgrounds, secondary text |
-| `border`, `input`, `ring` | borders, input borders, focus ring |
-| `primary` / `primary-foreground` | brand (emerald), primary buttons, active nav |
-| `secondary`, `accent` | secondary buttons, hover backgrounds |
-| `success`, `warning`, `destructive`, `info` (+ `-foreground`) | statuses, alerts, money direction |
+| Token                                                         | Use                                          |
+| ------------------------------------------------------------- | -------------------------------------------- |
+| `background` / `foreground`                                   | page background and default text             |
+| `card` / `card-foreground`                                    | surfaces (cards, sheets, popovers)           |
+| `muted` / `muted-foreground`                                  | subtle backgrounds, secondary text           |
+| `border`, `input`, `ring`                                     | borders, input borders, focus ring           |
+| `primary` / `primary-foreground`                              | brand (emerald), primary buttons, active nav |
+| `secondary`, `accent`                                         | secondary buttons, hover backgrounds         |
+| `success`, `warning`, `destructive`, `info` (+ `-foreground`) | statuses, alerts, money direction            |
 
 **Money colors (always the same):**
+
 - the member owes (negative balance) → `destructive`
 - the member gets money back (positive balance) → `success`
 - settled / zero → `muted-foreground`
@@ -65,12 +66,12 @@ Use a single `StatusBadge` component so these never drift.
 
 Motion explains changes; it doesn't decorate.
 
-| What | Duration | Easing |
-| --- | --- | --- |
-| Hover, press, toggle | 150 ms | ease-out |
-| Popover, dropdown, tooltip | 150–200 ms | ease-out (fade + 4 px slide) |
-| Dialog, sheet, page section | 200–250 ms | ease-out in, ease-in out |
-| List item add or remove | 200 ms | layout animation |
+| What                        | Duration   | Easing                       |
+| --------------------------- | ---------- | ---------------------------- |
+| Hover, press, toggle        | 150 ms     | ease-out                     |
+| Popover, dropdown, tooltip  | 150–200 ms | ease-out (fade + 4 px slide) |
+| Dialog, sheet, page section | 200–250 ms | ease-out in, ease-in out     |
+| List item add or remove     | 200 ms     | layout animation             |
 
 - Animate `opacity` and `transform` only, never layout properties like `width` or `top`.
 - Honour `prefers-reduced-motion`: turn off slides and keep only fades.
@@ -89,19 +90,19 @@ Motion explains changes; it doesn't decorate.
 
 The shared kit lives in `src/components/ui` (shadcn primitives) and `src/components/common` (app-level patterns):
 
-| Component | Rule |
-| --- | --- |
-| `Button` | variants: default (primary), secondary, outline, ghost, destructive, link. Sizes: sm, default, lg, icon. **One primary button per view.** Show a spinner inside the button while pending, and disable it. |
-| `Form` + `FormField` | Label above the input, help text below, the error replaces the help text. Required fields aren't marked with `*`; mark the *optional* ones instead. |
-| `Input`, `Select`, `Combobox`, `DatePicker`, `MoneyInput`, `OtpInput` | Height 40 px (44 px touch targets on mobile). `MoneyInput` shows ৳ and accepts only valid decimals. |
-| `Card`, `StatCard` | `StatCard` = label + big number + optional trend or helper text. |
-| `DataTable` | Sorting and filtering through nuqs (in the URL), a skeleton while loading, an empty state, and a card layout on mobile. |
-| `StatusBadge`, `MoneyText`, `MemberAvatar`, `DateText` | The **only** way to show a status, an amount, a member or a date. |
-| `EmptyState` | icon + one-line title + short explanation + primary action |
-| `ErrorState` | friendly message + "Try again" (calls `refetch`) |
-| `ConfirmDialog` | for destructive or irreversible actions. The confirm button names the action ("Close October", not "OK"). |
-| `ResponsiveDialog` | dialog on desktop, bottom sheet on mobile |
-| `Skeleton` | matches the shape of the content it replaces |
+| Component                                                             | Rule                                                                                                                                                                                                      |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Button`                                                              | variants: default (primary), secondary, outline, ghost, destructive, link. Sizes: sm, default, lg, icon. **One primary button per view.** Show a spinner inside the button while pending, and disable it. |
+| `Form` + `FormField`                                                  | Label above the input, help text below, the error replaces the help text. Required fields aren't marked with `*`; mark the _optional_ ones instead.                                                       |
+| `Input`, `Select`, `Combobox`, `DatePicker`, `MoneyInput`, `OtpInput` | Height 40 px (44 px touch targets on mobile). `MoneyInput` shows ৳ and accepts only valid decimals.                                                                                                       |
+| `Card`, `StatCard`                                                    | `StatCard` = label + big number + optional trend or helper text.                                                                                                                                          |
+| `DataTable`                                                           | Sorting and filtering through nuqs (in the URL), a skeleton while loading, an empty state, and a card layout on mobile.                                                                                   |
+| `StatusBadge`, `MoneyText`, `MemberAvatar`, `DateText`                | The **only** way to show a status, an amount, a member or a date.                                                                                                                                         |
+| `EmptyState`                                                          | icon + one-line title + short explanation + primary action                                                                                                                                                |
+| `ErrorState`                                                          | friendly message + "Try again" (calls `refetch`)                                                                                                                                                          |
+| `ConfirmDialog`                                                       | for destructive or irreversible actions. The confirm button names the action ("Close October", not "OK").                                                                                                 |
+| `ResponsiveDialog`                                                    | dialog on desktop, bottom sheet on mobile                                                                                                                                                                 |
+| `Skeleton`                                                            | matches the shape of the content it replaces                                                                                                                                                              |
 
 ## 7. States & feedback
 

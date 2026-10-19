@@ -42,10 +42,19 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   return result;
 };
 
+/**
+ * Cache tags. Mutations invalidate exactly what they change, scoped by id
+ * (`{ type: "Bazar", id }` plus `{ type: "Bazar", id: "LIST" }`), see FRONTEND_GUIDE §3.
+ */
+export const TAG_TYPES = ["Me"] as const;
+
+/** Builds a mess-scoped endpoint path: `messUrl(messId, "/bazars")` → `/messes/<id>/bazars`. */
+export const messUrl = (messId: string, path = "") => `/messes/${messId}${path}`;
+
 /** Root API slice. Feature APIs add endpoints with `api.injectEndpoints`. */
 export const api = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Me"],
+  tagTypes: TAG_TYPES,
   endpoints: () => ({}),
 });
