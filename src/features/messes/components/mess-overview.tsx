@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import {
-  CalendarCheck,
   CalendarRange,
   ChevronRight,
   MapPin,
+  MessageCircle,
   ShoppingBasket,
   UserPlus,
   Users,
@@ -21,6 +21,7 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { Skeleton } from "@/components/ui/skeleton";
 import { messRoutes } from "@/constants/routes";
 import { EmailVerificationBanner } from "@/features/auth/components/email-verification-banner";
+import { TodaysMealsCard } from "@/features/meals/components/todays-meals-card";
 import { InviteDialog } from "@/features/invitations/components/invite-dialog";
 import { useMembersQuery } from "@/features/members/members-api";
 import { useMonthsQuery } from "@/features/months/months-api";
@@ -30,9 +31,9 @@ import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
-  { icon: CalendarCheck, title: "Daily meals", text: "Members switch meals on or off before the cutoff." },
   { icon: ShoppingBasket, title: "Bazar", text: "Log groceries with receipts, approved by managers." },
   { icon: Wallet, title: "Deposits & bills", text: "Deposits, shared costs and the month's meal rate." },
+  { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
 ];
 
 export function MessOverview() {
@@ -116,7 +117,7 @@ export function MessOverview() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_22rem]">
+      <div className="grid gap-4 lg:grid-cols-[1fr_22rem] lg:items-start">
         <Card>
           <CardHeader>
             <CardTitle>Members</CardTitle>
@@ -151,7 +152,10 @@ export function MessOverview() {
           </CardContent>
         </Card>
 
-        {canManage && <JoinCodeCard />}
+        <div className="grid content-start gap-4">
+          <TodaysMealsCard />
+          {canManage && <JoinCodeCard />}
+        </div>
       </div>
 
       <section aria-labelledby="coming-next" className="grid gap-3">

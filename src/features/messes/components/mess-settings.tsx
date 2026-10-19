@@ -37,6 +37,7 @@ import {
   useUpdateMessMutation,
   useUpdateMessSettingsMutation,
 } from "../messes-api";
+import { MealSlotsCard } from "@/features/meals/components/meal-slots-card";
 import { messDetailsSchema, type MessDetailsValues } from "../messes-schemas";
 import type { MessSettings } from "../messes-types";
 import { describeBillingMonth, formatStartDay, GENDER_LABELS } from "../utils";
@@ -58,6 +59,7 @@ export function MessSettingsPage() {
         </Alert>
       )}
       <DetailsCard readOnly={!isAdmin} />
+      <MealSlotsCard readOnly={!isAdmin} />
       <RulesCard readOnly={!isAdmin} />
       <DangerZone />
     </div>

@@ -15,6 +15,7 @@ export const ROUTES = {
 /** Mess-scoped pages live under /m/<slug>. */
 export const messRoutes = (slug: string) => ({
   overview: `/m/${slug}`,
+  meals: `/m/${slug}/meals`,
   members: `/m/${slug}/members`,
   months: `/m/${slug}/months`,
   settings: `/m/${slug}/settings`,

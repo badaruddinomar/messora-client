@@ -31,7 +31,11 @@ export type ApiErrorCode =
   | "DATE_OUTSIDE_MONTHS"
   | "MONTHS_OUT_OF_ORDER"
   | "LAST_ADMIN"
-  | "CONFIRMATION_MISMATCH";
+  | "CONFIRMATION_MISMATCH"
+  | "MEAL_CUTOFF_PASSED"
+  | "MEAL_EDITING_DISABLED"
+  | "GUEST_MEALS_DISABLED"
+  | "MEMBER_NOT_ACTIVE_ON_DATE";
 
 export interface ApiErrorBody {
   success: false;
@@ -39,6 +43,8 @@ export interface ApiErrorBody {
   message: string;
   details?: Record<string, string[] | undefined>;
 }
+
+export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 /** Cursor-paginated list. */
 export interface Page<T> {
