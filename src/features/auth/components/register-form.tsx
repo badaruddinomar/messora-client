@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { getErrorMessage, getFieldErrors } from "@/lib/api-error";
 import { useRegisterMutation } from "../auth-api";
-import { registerSchema, type RegisterValues } from "../schemas";
+import { registerSchema, type RegisterValues } from "../auth-schemas";
+import { ROUTES } from "@/constants/routes";
 
 export function RegisterForm() {
   const [, setNext] = useQueryState("next", parseAsString);
@@ -25,7 +26,7 @@ export function RegisterForm() {
   const onSubmit = handleSubmit(async (values) => {
     // <RequireGuest> redirects once the session exists; users who gave an email
     // go straight to entering the code we just sent them.
-    if (values.email) await setNext("/verify-email");
+    if (values.email) await setNext(ROUTES.verifyEmail);
     await registerUser(values);
   });
 
@@ -74,7 +75,7 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-muted">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link href={ROUTES.login} className="font-medium text-primary hover:underline">
           Log in
         </Link>
       </p>

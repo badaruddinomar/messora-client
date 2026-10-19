@@ -8,6 +8,7 @@ import { parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import { ROUTES } from "@/constants/routes";
 import { getErrorMessage } from "@/lib/api-error";
 import { useForgotPasswordMutation, useResetPasswordMutation } from "../auth-api";
 import {
@@ -15,7 +16,7 @@ import {
   resetPasswordSchema,
   type ForgotPasswordValues,
   type ResetPasswordValues,
-} from "../schemas";
+} from "../auth-schemas";
 
 // The step and email live in the URL so a refresh doesn't lose progress.
 const flowParams = {
@@ -42,7 +43,7 @@ export function ForgotPasswordFlow() {
       )}
 
       <p className="text-center text-sm text-muted">
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link href={ROUTES.login} className="font-medium text-primary hover:underline">
           Back to log in
         </Link>
       </p>
@@ -93,7 +94,7 @@ function ResetStep({ email, onChangeEmail }: { email: string; onChangeEmail: () 
 
   const onSubmit = handleSubmit(async ({ code, password }) => {
     const res = await resetPassword({ email, code, password });
-    if (!res.error) router.replace("/login?reset=true");
+    if (!res.error) router.replace(`${ROUTES.login}?reset=true`);
   });
 
   return (

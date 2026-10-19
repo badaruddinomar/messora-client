@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { selectUser } from "@/features/auth/auth-slice";
 import { useAppSelector } from "@/store/hooks";
+import { ROUTES } from "@/constants/routes";
 
 export function DashboardHome() {
   const user = useAppSelector(selectUser);
@@ -23,7 +24,7 @@ export function DashboardHome() {
             Verify <span className="font-medium">{user.email}</span> so you can reset your password if you forget it.
           </p>
           <Link
-            href="/verify-email"
+            href={ROUTES.verifyEmail}
             className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
           >
             Verify email

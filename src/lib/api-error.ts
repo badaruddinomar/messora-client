@@ -1,6 +1,6 @@
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { SerializedError } from "@reduxjs/toolkit";
-import type { ApiErrorBody } from "./types";
+import type { ApiErrorBody } from "@/types/api";
 
 function isApiErrorBody(data: unknown): data is ApiErrorBody {
   return typeof data === "object" && data !== null && "message" in data;

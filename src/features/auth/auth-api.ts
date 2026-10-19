@@ -1,7 +1,8 @@
 import { api } from "@/store/api";
-import type { ApiResponse, User } from "@/lib/types";
+import type { ApiResponse } from "@/types/api";
+import type { User } from "@/types/user";
 import { loggedOut, userSet } from "./auth-slice";
-import type { ForgotPasswordValues, LoginValues, RegisterValues, ResetPasswordValues } from "./schemas";
+import type { ForgotPasswordValues, LoginValues, RegisterValues, ResetPasswordValues } from "./auth-schemas";
 
 type SessionResponse = ApiResponse<{ user: User; accessToken: string }>;
 type MessageResponse = ApiResponse<null>;

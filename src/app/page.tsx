@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 export default function HomePage() {
   return (
@@ -13,13 +14,13 @@ export default function HomePage() {
       </p>
       <div className="flex gap-3">
         <Link
-          href="/register"
+          href={ROUTES.register}
           className="inline-flex h-10 items-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground hover:opacity-90"
         >
           Get started
         </Link>
         <Link
-          href="/login"
+          href={ROUTES.login}
           className="inline-flex h-10 items-center rounded-lg border border-border bg-card px-5 text-sm font-medium"
         >
           Log in

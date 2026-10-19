@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLogoutMutation } from "@/features/auth/auth-api";
 import { selectUser } from "@/features/auth/auth-slice";
 import { useAppSelector } from "@/store/hooks";
+import { ROUTES } from "@/constants/routes";
 
 export function AppHeader() {
   const user = useAppSelector(selectUser);
@@ -13,7 +14,7 @@ export function AppHeader() {
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-4">
-        <Link href="/dashboard" className="text-lg font-bold tracking-tight">
+        <Link href={ROUTES.dashboard} className="text-lg font-bold tracking-tight">
           Mess<span className="text-primary">ora</span>
         </Link>
         <div className="flex items-center gap-3">

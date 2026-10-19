@@ -11,7 +11,8 @@ import { getErrorMessage } from "@/lib/api-error";
 import { useAppSelector } from "@/store/hooks";
 import { useSendEmailVerificationMutation, useVerifyEmailMutation } from "../auth-api";
 import { selectUser } from "../auth-slice";
-import { verifyCodeSchema, type VerifyCodeValues } from "../schemas";
+import { verifyCodeSchema, type VerifyCodeValues } from "../auth-schemas";
+import { ROUTES } from "@/constants/routes";
 
 export function VerifyEmailForm() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export function VerifyEmailForm() {
     return (
       <div className="flex flex-col gap-4">
         <Alert tone="success">{user.email} is verified.</Alert>
-        <Link href="/dashboard" className="text-center text-sm font-medium text-primary hover:underline">
+        <Link href={ROUTES.dashboard} className="text-center text-sm font-medium text-primary hover:underline">
           Go to dashboard
         </Link>
       </div>
@@ -42,7 +43,7 @@ export function VerifyEmailForm() {
 
   const onSubmit = handleSubmit(async (values) => {
     const res = await verifyEmail(values);
-    if (!res.error) router.replace("/dashboard");
+    if (!res.error) router.replace(ROUTES.dashboard);
   });
 
   return (
@@ -72,7 +73,7 @@ export function VerifyEmailForm() {
       </Button>
 
       <div className="flex justify-between text-xs">
-        <Link href="/dashboard" className="text-muted hover:underline">
+        <Link href={ROUTES.dashboard} className="text-muted hover:underline">
           Skip for now
         </Link>
         <button

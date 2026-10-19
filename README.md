@@ -38,11 +38,28 @@ npm run dev                  # http://localhost:3000
 
 ```
 src/
-  app/
-    (auth)/   login, register, forgot-password
-    (app)/    dashboard, verify-email
-  components/ui/      Button, Field, Alert
-  features/auth/      auth-api, auth-slice, schemas, components
-  store/              store, root API slice, typed hooks
-  providers/          Redux + nuqs providers
+  app/                      # routing only: layouts, pages, metadata
+    (auth)/                 # guest-only: login, register, forgot-password
+    (app)/                  # logged-in: dashboard, verify-email
+  components/
+    ui/                     # generic building blocks: Button, Field, Alert, Spinner
+    layout/                 # app chrome: AppHeader
+  features/
+    auth/
+      auth-api.ts           # RTK Query endpoints (injectEndpoints)
+      auth-slice.ts         # Redux slice
+      auth-schemas.ts       # Zod form schemas
+      components/           # forms, RequireAuth, RequireGuest
+      hooks/                # useAuthStatus
+      utils.ts
+    dashboard/components/
+  store/                    # store setup, root API slice (with token refresh), typed hooks
+  providers/                # Redux + nuqs providers
+  constants/routes.ts       # route paths
+  lib/                      # framework-agnostic helpers (cn, API error parsing)
+  types/                    # shared types (API envelope, User)
 ```
+
+**Adding a feature** (e.g. `mess`): create `src/features/mess/` with `mess-api.ts` (inject endpoints into
+`store/api.ts`), `mess-schemas.ts` and `components/`; keep the files under `app/` thin, so they only
+import and render feature components.

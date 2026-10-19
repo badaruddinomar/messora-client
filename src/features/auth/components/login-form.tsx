@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { getErrorMessage } from "@/lib/api-error";
 import { useLoginMutation } from "../auth-api";
-import { loginSchema, type LoginValues } from "../schemas";
+import { loginSchema, type LoginValues } from "../auth-schemas";
+import { ROUTES } from "@/constants/routes";
 
 export function LoginForm() {
   const [login, { isLoading, error }] = useLoginMutation();
@@ -51,7 +52,7 @@ export function LoginForm() {
       />
 
       <div className="-mt-2 text-right">
-        <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+        <Link href={ROUTES.forgotPassword} className="text-xs text-primary hover:underline">
           Forgot password?
         </Link>
       </div>
@@ -62,7 +63,7 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted">
         New to Messora?{" "}
-        <Link href="/register" className="font-medium text-primary hover:underline">
+        <Link href={ROUTES.register} className="font-medium text-primary hover:underline">
           Create an account
         </Link>
       </p>

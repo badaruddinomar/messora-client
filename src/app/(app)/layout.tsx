@@ -1,5 +1,5 @@
-import { AppHeader } from "@/components/app-header";
-import { RequireAuth } from "@/features/auth/components/guards";
+import { AppHeader } from "@/components/layout/app-header";
+import { RequireAuth } from "@/features/auth/components/require-auth";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
