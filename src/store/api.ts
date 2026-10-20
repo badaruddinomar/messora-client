@@ -63,6 +63,10 @@ export const TAG_TYPES = [
   "BazarDuties",
   "Deposits",
   "MonthPreview",
+  "Expenses",
+  "Charges",
+  "Staff",
+  "Rooms",
 ] as const;
 
 /** Builds a mess-scoped endpoint path: `messUrl(messId, "/bazars")` → `/messes/<id>/bazars`. */

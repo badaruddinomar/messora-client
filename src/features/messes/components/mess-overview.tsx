@@ -36,7 +36,7 @@ import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
-  { icon: ReceiptText, title: "Shared costs & charges", text: "Rent, utilities, staff and other bills." },
+  { icon: ReceiptText, title: "Reports", text: "Charts of spending, meals and dues over time." },
   { icon: Wallet, title: "Closing the month", text: "Final bills, dues, refunds and the fund handover." },
   { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
 ];

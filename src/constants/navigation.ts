@@ -1,4 +1,5 @@
 import {
+  BedDouble,
   CalendarCheck,
   CalendarRange,
   House,
@@ -47,7 +48,7 @@ export function buildNavigation(slug: string | null): NavSection[] {
         { label: "Meals", icon: CalendarCheck, href: routes.meals, mobile: true },
         { label: "Bazar", icon: ShoppingBasket, href: routes.bazar, mobile: true },
         { label: "Deposits", icon: Wallet, href: routes.deposits },
-        { label: "Expenses", icon: ReceiptText },
+        { label: "Expenses", icon: ReceiptText, href: routes.expenses },
         { label: "Months", icon: CalendarRange, href: routes.months },
       ],
     },
@@ -55,6 +56,7 @@ export function buildNavigation(slug: string | null): NavSection[] {
       label: "Mess",
       items: [
         { label: "Members", icon: Users, href: routes.members },
+        { label: "Rooms", icon: BedDouble, href: routes.rooms },
         { label: "Chat", icon: MessageCircle, mobile: true },
         { label: "Notices", icon: Megaphone },
         { label: "Settings", icon: Settings, href: routes.settings },

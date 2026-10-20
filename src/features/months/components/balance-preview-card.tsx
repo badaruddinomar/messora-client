@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { messRoutes } from "@/constants/routes";
 import { useCurrentMess } from "@/features/messes/mess-context";
-import { formatCount, formatMoney, isZero } from "@/lib/format";
+import { formatCount, formatMoney, isNegative, isZero } from "@/lib/format";
+import { subtractMoney } from "@/lib/money";
 import { useMonthPreviewQuery, useMonthsQuery } from "../months-api";
 import { monthLabel } from "../utils";
 
@@ -25,6 +26,7 @@ export function BalancePreviewCard() {
     { skip: !month },
   );
   const me = preview?.members.find((m) => m.member.isYou);
+  const otherCharges = me ? subtractMoney(me.chargeTotal, me.seatRentEstimate) : "0";
 
   return (
     <Card>
@@ -53,9 +55,15 @@ export function BalancePreviewCard() {
                 −<MoneyText value={me.sharedCost} />
               </Line>
             )}
-            {!isZero(me.chargeTotal) && (
-              <Line label="Charges">
-                −<MoneyText value={me.chargeTotal} />
+            {!isZero(me.seatRentEstimate) && (
+              <Line label="Seat rent">
+                −<MoneyText value={me.seatRentEstimate} />
+              </Line>
+            )}
+            {!isZero(otherCharges) && (
+              <Line label={isNegative(otherCharges) ? "Taken off your bill" : "Other charges"}>
+                {isNegative(otherCharges) ? "+" : "−"}
+                <MoneyText value={otherCharges.replace("-", "")} />
               </Line>
             )}
           </dl>

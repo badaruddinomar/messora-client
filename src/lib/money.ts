@@ -28,3 +28,7 @@ const fromPaisa = (paisa: bigint) => {
 /** Sum of amounts; anything that isn't a valid amount (an empty field) counts as 0. */
 export const sumMoney = (values: (Money | undefined)[]) =>
   fromPaisa(values.reduce((total, v) => total + (v && isMoney(v) ? toPaisa(v) : ZERO), ZERO));
+
+/** `a − b` exactly; invalid amounts count as 0. The result may be negative ("-12.50"). */
+export const subtractMoney = (a: Money | undefined, b: Money | undefined) =>
+  fromPaisa((a && isMoney(a) ? toPaisa(a) : ZERO) - (b && isMoney(b) ? toPaisa(b) : ZERO));

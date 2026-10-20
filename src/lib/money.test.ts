@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isMoney, sumMoney } from "./money";
+import { isMoney, subtractMoney, sumMoney } from "./money";
 
 describe("money", () => {
   it("adds decimal strings exactly", () => {
@@ -17,5 +17,14 @@ describe("money", () => {
     expect(isMoney("1.234")).toBe(false);
     expect(isMoney("-5")).toBe(false);
     expect(isMoney("")).toBe(false);
+  });
+});
+
+describe("subtractMoney", () => {
+  it("subtracts exactly, going negative when needed", () => {
+    expect(subtractMoney("1000", "333.33")).toBe("666.67");
+    expect(subtractMoney("0.3", "0.1")).toBe("0.20");
+    expect(subtractMoney("100", "150.5")).toBe("-50.50");
+    expect(subtractMoney("", "5")).toBe("-5.00");
   });
 });

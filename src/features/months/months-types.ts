@@ -25,8 +25,11 @@ export interface MonthPreviewRow {
   mealCost: Money;
   sharedCost: Money;
   chargeTotal: Money;
+  /** Seat rent counted in chargeTotal before the month is closed. */
+  seatRentEstimate: Money;
   deposits: Money;
   ownPocketBazar: Money;
+  ownPocketExpenses: Money;
   totalDeposit: Money;
   openingBalance: Money;
   /** Positive: the mess owes the member. Negative: the member owes the mess (BUSINESS_RULES §8). */
@@ -38,13 +41,20 @@ export interface MonthPreview {
   monthId: string;
   isFinal: boolean;
   previousMonthClosed: boolean;
-  totals: { totalBazar: Money; totalMeals: string; mealRate: string; totalDeposits: Money };
+  totals: {
+    totalBazar: Money;
+    totalMeals: string;
+    mealRate: string;
+    totalDeposits: Money;
+    totalExpenses: Money;
+  };
   pending: { bazars: { count: number; total: Money }; deposits: { count: number; total: Money } };
   cash: {
     openingCash: Money;
     deposits: Money;
     settlementsIn: Money;
     messFundBazar: Money;
+    messFundExpenses: Money;
     settlementsOut: Money;
     closingCash: Money;
   };

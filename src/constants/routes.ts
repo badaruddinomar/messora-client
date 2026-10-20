@@ -18,6 +18,8 @@ export const messRoutes = (slug: string) => ({
   meals: `/m/${slug}/meals`,
   bazar: `/m/${slug}/bazar`,
   deposits: `/m/${slug}/deposits`,
+  expenses: `/m/${slug}/expenses`,
+  rooms: `/m/${slug}/rooms`,
   members: `/m/${slug}/members`,
   months: `/m/${slug}/months`,
   settings: `/m/${slug}/settings`,
