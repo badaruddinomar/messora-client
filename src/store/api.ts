@@ -59,6 +59,8 @@ export const TAG_TYPES = [
   "MealOff",
   "MealRequests",
   "Menu",
+  "Bazars",
+  "BazarDuties",
 ] as const;
 
 /** Builds a mess-scoped endpoint path: `messUrl(messId, "/bazars")` → `/messes/<id>/bazars`. */

@@ -7,6 +7,7 @@ import {
   ChevronRight,
   MapPin,
   MessageCircle,
+  ReceiptText,
   ShoppingBasket,
   UserPlus,
   Users,
@@ -20,6 +21,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { messRoutes } from "@/constants/routes";
+import { MoneyText } from "@/components/common/money-text";
+import { useBazarSummaryQuery } from "@/features/bazars/bazars-api";
+import { DutyTodayBanner } from "@/features/bazars/components/duty-today-banner";
 import { EmailVerificationBanner } from "@/features/auth/components/email-verification-banner";
 import { TodaysMealsCard } from "@/features/meals/components/todays-meals-card";
 import { InviteDialog } from "@/features/invitations/components/invite-dialog";
@@ -31,8 +35,8 @@ import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
-  { icon: ShoppingBasket, title: "Bazar", text: "Log groceries with receipts, approved by managers." },
-  { icon: Wallet, title: "Deposits & bills", text: "Deposits, shared costs and the month's meal rate." },
+  { icon: Wallet, title: "Deposits", text: "Members' deposits, approved by managers." },
+  { icon: ReceiptText, title: "Shared costs & bills", text: "Rent, utilities and the month's meal rate." },
   { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
 ];
 
@@ -44,6 +48,10 @@ export function MessOverview() {
   const { data: requests } = useMembersQuery({ messId: mess.id, status: "PENDING" }, { skip: !canManage });
   const { data: months } = useMonthsQuery(mess.id);
   const currentMonth = months?.find((m) => m.isCurrent);
+  const { data: bazar } = useBazarSummaryQuery(
+    { messId: mess.id, monthId: currentMonth?.id },
+    { skip: !currentMonth },
+  );
 
   return (
     <div className="grid gap-8">
@@ -58,6 +66,10 @@ export function MessOverview() {
               </span>
             )}
             <span>{GENDER_LABELS[mess.gender]}</span>
+            <span>
+              Your role:{" "}
+              {mess.membership.isMonthManager ? "Manager of this month" : ROLE_LABELS[mess.membership.role]}
+            </span>
           </span>
         }
         actions={
@@ -75,6 +87,7 @@ export function MessOverview() {
       />
 
       <EmailVerificationBanner />
+      <DutyTodayBanner />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
         <StatCard
@@ -96,9 +109,20 @@ export function MessOverview() {
           }
         />
         <StatCard
-          label="Your role"
-          value={ROLE_LABELS[mess.membership.role]}
-          helper={mess.membership.isMonthManager ? "Manager of this month" : "In this mess"}
+          label="Bazar this month"
+          icon={ShoppingBasket}
+          value={bazar ? <MoneyText value={bazar.approved.total} compact /> : "–"}
+          helper={
+            canManage && bazar?.pending.count ? (
+              <Link href={`${routes.bazar}?tab=review`} className="font-medium text-primary hover:underline">
+                {bazar.pending.count} waiting for approval
+              </Link>
+            ) : (
+              <Link href={routes.bazar} className="hover:text-foreground hover:underline">
+                {bazar ? `${bazar.approved.count} approved` : "Loading…"}
+              </Link>
+            )
+          }
         />
         <StatCard
           label="This month"
