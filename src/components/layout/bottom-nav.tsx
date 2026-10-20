@@ -25,7 +25,7 @@ export function BottomNav() {
     <>
       <nav
         aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden print:hidden"
       >
         {items
           .filter((i) => i.mobile)

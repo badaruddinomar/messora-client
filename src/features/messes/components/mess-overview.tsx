@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import {
+  BellRing,
   CalendarRange,
   ChevronRight,
   MapPin,
+  Megaphone,
   MessageCircle,
-  ReceiptText,
   ShoppingBasket,
   UserPlus,
   Users,
-  Wallet,
 } from "lucide-react";
 import { PageHeader } from "@/components/common/page-header";
 import { StatCard } from "@/components/common/stat-card";
@@ -31,15 +31,19 @@ import { useMembersQuery } from "@/features/members/members-api";
 import { DueBanner } from "@/features/months/components/due-banner";
 import { BalancePreviewCard } from "@/features/months/components/balance-preview-card";
 import { useMonthsQuery } from "@/features/months/months-api";
+import { ManagerDesk } from "@/features/reports/components/manager-desk";
+import { MealRateChart } from "@/features/reports/components/meal-rate-chart";
+import { NextDutyCard } from "@/features/reports/components/next-duty-card";
+import { useDashboardQuery } from "@/features/reports/reports-api";
 import { daysLeft } from "@/features/months/utils";
 import { useCurrentMess, useMessPermissions } from "../mess-context";
 import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
-  { icon: ReceiptText, title: "Reports", text: "Charts of spending, meals and dues over time." },
-  { icon: Wallet, title: "Your dashboard", text: "Spending trends and your history at a glance." },
-  { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
+  { icon: Megaphone, title: "Notice board", text: "Pin rules and announcements for everyone." },
+  { icon: BellRing, title: "Notifications", text: "Choose what reaches you, in the app or by email." },
+  { icon: MessageCircle, title: "Chat", text: "Talk to the whole mess in one place." },
 ];
 
 export function MessOverview() {
@@ -49,6 +53,7 @@ export function MessOverview() {
   const { data: members, isLoading } = useMembersQuery({ messId: mess.id });
   const { data: requests } = useMembersQuery({ messId: mess.id, status: "PENDING" }, { skip: !canManage });
   const { data: months } = useMonthsQuery(mess.id);
+  const { data: dashboard } = useDashboardQuery(mess.id);
   const currentMonth = months?.find((m) => m.isCurrent);
   const { data: bazar } = useBazarSummaryQuery(
     { messId: mess.id, monthId: currentMonth?.id },
@@ -56,7 +61,7 @@ export function MessOverview() {
   );
 
   return (
-    <div className="grid gap-8">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-8">
       <PageHeader
         title={mess.name}
         description={
@@ -144,6 +149,8 @@ export function MessOverview() {
         />
       </div>
 
+      {canManage && <ManagerDesk dashboard={dashboard} />}
+
       <div className="grid gap-4 lg:grid-cols-[1fr_22rem] lg:items-start">
         <Card>
           <CardHeader>
@@ -180,11 +187,14 @@ export function MessOverview() {
         </Card>
 
         <div className="grid content-start gap-4">
+          <NextDutyCard dashboard={dashboard} />
           <BalancePreviewCard />
           <TodaysMealsCard />
           {canManage && <JoinCodeCard />}
         </div>
       </div>
+
+      <MealRateChart />
 
       <section aria-labelledby="coming-next" className="grid gap-3">
         <h2 id="coming-next" className="text-sm font-medium text-muted-foreground">

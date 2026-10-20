@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ChevronLeft, FileText, Info } from "lucide-react";
+import { ChevronLeft, FileText, Info, Printer } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { MoneyText } from "@/components/common/money-text";
 import { UserAvatar } from "@/components/common/user-avatar";
@@ -20,6 +20,8 @@ import {
   type ExpenseCategory,
 } from "@/features/expenses/expenses-types";
 import { useCurrentMess } from "@/features/messes/mess-context";
+import { DownloadCsvButton } from "@/features/reports/components/download-csv-button";
+import { statementExportUrl } from "@/features/reports/reports-api";
 import { cn } from "@/lib/cn";
 import { formatCount, formatDate, formatMoney, isNegative, isZero } from "@/lib/format";
 import { useStatementQuery } from "../months-api";
@@ -34,12 +36,30 @@ export function BillPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-2xl gap-6">
-      <Button variant="ghost" size="sm" className="-ml-2 w-fit" asChild>
-        <Link href={messRoutes(mess.slug).month(monthId)}>
-          <ChevronLeft />
-          Back to the month
-        </Link>
-      </Button>
+      <div className="flex flex-wrap items-center justify-between gap-2 print:hidden">
+        <Button variant="ghost" size="sm" className="-ml-2 w-fit" asChild>
+          <Link href={messRoutes(mess.slug).month(monthId)}>
+            <ChevronLeft />
+            Back to the month
+          </Link>
+        </Button>
+        {data && (
+          <div className="flex gap-2">
+            <DownloadCsvButton
+              size="sm"
+              url={statementExportUrl(mess.id, monthId, memberId)}
+              fileName={`${mess.slug}-bill.csv`}
+            >
+              CSV
+            </DownloadCsvButton>
+            <Button size="sm" variant="outline" onClick={() => window.print()}>
+              <Printer />
+              Print or PDF
+            </Button>
+          </div>
+        )}
+      </div>
+      {data && <p className="hidden text-sm text-muted-foreground print:block">{mess.name}</p>}
       {error ? (
         <EmptyState
           icon={FileText}

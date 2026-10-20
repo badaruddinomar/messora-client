@@ -22,6 +22,8 @@ export const messRoutes = (slug: string) => ({
   rooms: `/m/${slug}/rooms`,
   members: `/m/${slug}/members`,
   months: `/m/${slug}/months`,
+  /** Charts and printable reports; `?month=` picks the month. */
+  reports: `/m/${slug}/reports`,
   month: (monthId: string) => `/m/${slug}/months/${monthId}`,
   /** A member's bill for a month; "me" for your own. */
   bill: (monthId: string, memberId = "me") => `/m/${slug}/months/${monthId}/bill/${memberId}`,

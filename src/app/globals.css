@@ -51,6 +51,8 @@
   --chart-3: oklch(0.705 0.16 62);
   --chart-4: oklch(0.585 0.2 293);
   --chart-5: oklch(0.645 0.2 12);
+  /* Single-series charts; checked against the card surface with the dataviz validator. */
+  --chart-series: oklch(0.596 0.145 163.23);
 }
 
 .dark {
@@ -94,6 +96,8 @@
   --chart-3: oklch(0.795 0.15 74);
   --chart-4: oklch(0.7 0.16 293);
   --chart-5: oklch(0.72 0.17 12);
+  /* A step darker than primary: L 0.66 keeps marks inside the dark chart band. */
+  --chart-series: oklch(0.66 0.15 162.48);
 }
 
 @theme inline {
@@ -140,6 +144,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-series: var(--chart-series);
 }
 
 @layer base {
@@ -165,5 +170,57 @@
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Paper is white: printing always uses the light theme, without shadows. */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  .dark {
+    --background: oklch(0.985 0.002 247.84);
+    --foreground: oklch(0.21 0.034 264.67);
+    --card: oklch(1 0 0);
+    --card-foreground: var(--foreground);
+    --popover: oklch(1 0 0);
+    --popover-foreground: var(--foreground);
+    --primary: oklch(0.596 0.145 163.23);
+    --primary-foreground: oklch(0.985 0.01 166);
+    --secondary: oklch(0.967 0.003 264.54);
+    --secondary-foreground: oklch(0.21 0.034 264.67);
+    --muted: oklch(0.967 0.003 264.54);
+    --muted-foreground: oklch(0.551 0.027 264.36);
+    --accent: oklch(0.955 0.012 166);
+    --accent-foreground: oklch(0.38 0.08 165);
+    --destructive: oklch(0.577 0.215 27.33);
+    --destructive-foreground: oklch(0.985 0 0);
+    --success: oklch(0.596 0.145 163.23);
+    --success-foreground: oklch(0.985 0.01 166);
+    --warning: oklch(0.705 0.16 62);
+    --warning-foreground: oklch(0.28 0.07 46);
+    --info: oklch(0.588 0.158 241.97);
+    --info-foreground: oklch(0.985 0 0);
+    --border: oklch(0.928 0.006 264.53);
+    --input: oklch(0.9 0.008 264.53);
+    --ring: oklch(0.596 0.145 163.23);
+    --sidebar: oklch(0.99 0.001 247.84);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-accent: oklch(0.955 0.012 166);
+    --sidebar-accent-foreground: oklch(0.38 0.08 165);
+    --sidebar-border: var(--border);
+    --chart-1: oklch(0.596 0.145 163.23);
+    --chart-2: oklch(0.588 0.158 241.97);
+    --chart-3: oklch(0.705 0.16 62);
+    --chart-4: oklch(0.585 0.2 293);
+    --chart-5: oklch(0.645 0.2 12);
+    --chart-series: oklch(0.596 0.145 163.23);
+  }
+  html,
+  body {
+    background: white;
+  }
+  [data-slot="card"] {
+    box-shadow: none;
   }
 }

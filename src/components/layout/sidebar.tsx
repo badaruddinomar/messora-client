@@ -12,7 +12,7 @@ export function Sidebar() {
   const { slug } = useMessFromRoute();
 
   return (
-    <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col border-r bg-sidebar lg:flex">
+    <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col border-r bg-sidebar lg:flex print:hidden">
       <div className="flex h-16 items-center px-5">
         <Logo href={ROUTES.dashboard} />
       </div>

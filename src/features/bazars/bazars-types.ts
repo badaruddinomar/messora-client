@@ -56,6 +56,8 @@ export interface BazarFilters {
   status?: ApprovalStatus;
   shopperId?: string;
   paidFrom?: PaidFrom;
+  /** Page size (default 20, at most 100). */
+  limit?: number;
 }
 
 interface Total {

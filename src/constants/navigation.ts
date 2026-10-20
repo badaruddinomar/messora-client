@@ -2,6 +2,7 @@ import {
   BedDouble,
   CalendarCheck,
   CalendarRange,
+  ChartColumn,
   House,
   LayoutGrid,
   Megaphone,
@@ -50,6 +51,7 @@ export function buildNavigation(slug: string | null): NavSection[] {
         { label: "Deposits", icon: Wallet, href: routes.deposits },
         { label: "Expenses", icon: ReceiptText, href: routes.expenses },
         { label: "Months", icon: CalendarRange, href: routes.months },
+        { label: "Reports", icon: ChartColumn, href: routes.reports },
       ],
     },
     {

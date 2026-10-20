@@ -127,6 +127,8 @@ Every data view handles **loading, empty, error and success**. That's part of th
 - One chart answers one question. Title it with the insight ("Meal rate is down 8% from September"), not just the metric.
 - Use the token colors; a series in `primary`, comparisons in `muted-foreground`. At most 5 categorical colors.
 - Always label axes and units (৳). Tooltips use `MoneyText` formatting. Every chart has an empty state.
+- A single series uses `--chart-series` (validated against the card surface in light and dark; dark steps down to L 0.66 to stay in the dark chart band). Build charts with `ChartCard` (`components/charts`): insight title, a Chart/Table switch, and the table is what prints.
+- Thin marks: 2px lines with ringed dots, bars at most 24px with a 4px rounded end, hairline solid gridlines, no dual axes.
 
 ## 10. Accessibility
 
