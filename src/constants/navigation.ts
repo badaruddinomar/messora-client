@@ -46,7 +46,7 @@ export function buildNavigation(slug: string | null): NavSection[] {
         { label: "Overview", icon: House, href: routes.overview, mobile: true, exact: true },
         { label: "Meals", icon: CalendarCheck, href: routes.meals, mobile: true },
         { label: "Bazar", icon: ShoppingBasket, href: routes.bazar, mobile: true },
-        { label: "Deposits", icon: Wallet },
+        { label: "Deposits", icon: Wallet, href: routes.deposits },
         { label: "Expenses", icon: ReceiptText },
         { label: "Months", icon: CalendarRange, href: routes.months },
       ],

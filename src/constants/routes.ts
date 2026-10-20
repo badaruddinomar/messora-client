@@ -17,6 +17,7 @@ export const messRoutes = (slug: string) => ({
   overview: `/m/${slug}`,
   meals: `/m/${slug}/meals`,
   bazar: `/m/${slug}/bazar`,
+  deposits: `/m/${slug}/deposits`,
   members: `/m/${slug}/members`,
   months: `/m/${slug}/months`,
   settings: `/m/${slug}/settings`,

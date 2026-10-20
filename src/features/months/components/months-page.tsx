@@ -18,6 +18,7 @@ import { useMonthsQuery } from "../months-api";
 import type { Month } from "../months-types";
 import { daysLeft, formatPeriod, monthLabel, monthProgress } from "../utils";
 import { MonthManagerDialog } from "./month-manager-dialog";
+import { MonthSummary } from "./month-summary";
 import { MonthStatusBadge } from "./month-status-badge";
 
 export function MonthsPage() {
@@ -45,6 +46,7 @@ export function MonthsPage() {
       ) : (
         <>
           {current && <CurrentMonthCard month={current} />}
+          {current && <MonthSummary month={current} />}
 
           {waiting.length > 0 && (
             <Alert variant="warning">

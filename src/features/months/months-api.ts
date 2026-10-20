@@ -1,6 +1,6 @@
 import { api, messUrl } from "@/store/api";
 import type { ApiResponse } from "@/types/api";
-import type { Month } from "./months-types";
+import type { Month, MonthPreview } from "./months-types";
 
 const monthsTag = (messId: string) => ({ type: "Months" as const, id: messId });
 
@@ -11,6 +11,13 @@ export const monthsApi = api.injectEndpoints({
       query: (messId) => messUrl(messId, "/months"),
       transformResponse: (res: ApiResponse<Month[]>) => res.data,
       providesTags: (_r, _e, messId) => [monthsTag(messId)],
+    }),
+
+    /** The month so far: meal rate and everyone's running balance (an estimate until it's closed). */
+    monthPreview: build.query<MonthPreview, { messId: string; monthId: string }>({
+      query: ({ messId, monthId }) => messUrl(messId, `/months/${monthId}/preview`),
+      transformResponse: (res: ApiResponse<MonthPreview>) => res.data,
+      providesTags: (_r, _e, { messId }) => [{ type: "MonthPreview", id: messId }],
     }),
 
     setMonthManager: build.mutation<Month, { messId: string; monthId: string; managerId: string | null }>({
@@ -26,4 +33,4 @@ export const monthsApi = api.injectEndpoints({
   }),
 });
 
-export const { useMonthsQuery, useSetMonthManagerMutation } = monthsApi;
+export const { useMonthsQuery, useMonthPreviewQuery, useSetMonthManagerMutation } = monthsApi;

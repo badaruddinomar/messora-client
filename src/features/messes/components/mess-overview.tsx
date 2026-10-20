@@ -28,6 +28,7 @@ import { EmailVerificationBanner } from "@/features/auth/components/email-verifi
 import { TodaysMealsCard } from "@/features/meals/components/todays-meals-card";
 import { InviteDialog } from "@/features/invitations/components/invite-dialog";
 import { useMembersQuery } from "@/features/members/members-api";
+import { BalancePreviewCard } from "@/features/months/components/balance-preview-card";
 import { useMonthsQuery } from "@/features/months/months-api";
 import { daysLeft } from "@/features/months/utils";
 import { useCurrentMess, useMessPermissions } from "../mess-context";
@@ -35,8 +36,8 @@ import { GENDER_LABELS, ROLE_LABELS } from "../utils";
 import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
-  { icon: Wallet, title: "Deposits", text: "Members' deposits, approved by managers." },
-  { icon: ReceiptText, title: "Shared costs & bills", text: "Rent, utilities and the month's meal rate." },
+  { icon: ReceiptText, title: "Shared costs & charges", text: "Rent, utilities, staff and other bills." },
+  { icon: Wallet, title: "Closing the month", text: "Final bills, dues, refunds and the fund handover." },
   { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
 ];
 
@@ -177,6 +178,7 @@ export function MessOverview() {
         </Card>
 
         <div className="grid content-start gap-4">
+          <BalancePreviewCard />
           <TodaysMealsCard />
           {canManage && <JoinCodeCard />}
         </div>

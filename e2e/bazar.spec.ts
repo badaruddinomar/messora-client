@@ -112,7 +112,7 @@ test("a manager plans bazar duty and the member's bazar ticks it off", async ({ 
   await plan.getByRole("button", { name: /Sadia Shopper/ }).click();
   await plan.getByRole("button", { name: /Bazar Admin/ }).click();
   await plan.getByRole("button", { name: "Plan duty" }).click();
-  await expect(admin.getByText("Bazar duty planned")).toBeVisible();
+  await expect(admin.getByText("Bazar duty planned").first()).toBeVisible();
   await expect(admin.getByText("Today", { exact: true })).toBeVisible();
 
   // The member is first in line, so they're on duty today.

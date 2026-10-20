@@ -5,6 +5,7 @@ import type { Bazar, BazarDuty, BazarFilters, BazarInput, BazarSummary, UploadTa
 const data = <T>(res: ApiResponse<T>) => res.data;
 const bazarsTag = (messId: string) => ({ type: "Bazars" as const, id: messId });
 const dutiesTag = (messId: string) => ({ type: "BazarDuties" as const, id: messId });
+const previewTag = (messId: string) => ({ type: "MonthPreview" as const, id: messId });
 
 type DutiesResponse = { monthId: string; duties: BazarDuty[] };
 
@@ -36,7 +37,7 @@ export const bazarsApi = api.injectEndpoints({
       query: ({ messId, ...body }) => ({ url: messUrl(messId, "/bazars"), method: "POST", body }),
       transformResponse: data<Bazar>,
       // A bazar can complete a duty, so duties refresh too.
-      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), dutiesTag(messId)],
+      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), dutiesTag(messId), previewTag(messId)],
     }),
     updateBazar: build.mutation<Bazar, { messId: string; bazarId: string } & Partial<BazarInput>>({
       query: ({ messId, bazarId, ...body }) => ({
@@ -45,12 +46,12 @@ export const bazarsApi = api.injectEndpoints({
         body,
       }),
       transformResponse: data<Bazar>,
-      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId)],
+      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), previewTag(messId)],
     }),
     deleteBazar: build.mutation<void, { messId: string; bazarId: string }>({
       query: ({ messId, bazarId }) => ({ url: messUrl(messId, `/bazars/${bazarId}`), method: "DELETE" }),
       transformResponse: () => undefined,
-      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId)],
+      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), previewTag(messId)],
     }),
     approveBazar: build.mutation<Bazar, { messId: string; bazarId: string }>({
       query: ({ messId, bazarId }) => ({
@@ -58,7 +59,7 @@ export const bazarsApi = api.injectEndpoints({
         method: "POST",
       }),
       transformResponse: data<Bazar>,
-      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId)],
+      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), previewTag(messId)],
     }),
     rejectBazar: build.mutation<Bazar, { messId: string; bazarId: string; reason: string }>({
       query: ({ messId, bazarId, reason }) => ({
@@ -67,7 +68,7 @@ export const bazarsApi = api.injectEndpoints({
         body: { reason },
       }),
       transformResponse: data<Bazar>,
-      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId)],
+      invalidatesTags: (_r, _e, { messId }) => [bazarsTag(messId), previewTag(messId)],
     }),
 
     createUpload: build.mutation<

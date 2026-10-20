@@ -17,6 +17,7 @@ const dayTag = (messId: string, date: string) => ({ type: "MealDay" as const, id
 const allMealTags = (messId: string) => [
   { type: "MealDay" as const, id: messId },
   { type: "MemberMeals" as const, id: messId },
+  { type: "MonthPreview" as const, id: messId },
 ];
 
 const data = <T>(res: ApiResponse<T>) => res.data;
@@ -86,7 +87,10 @@ export const mealsApi = api.injectEndpoints({
           patches.forEach((p) => p.undo());
         }
       },
-      invalidatesTags: (_r, _e, { messId }) => [{ type: "MemberMeals", id: messId }],
+      invalidatesTags: (_r, _e, { messId }) => [
+        { type: "MemberMeals", id: messId },
+        { type: "MonthPreview", id: messId },
+      ],
     }),
     setUsualMeals: build.mutation<
       { defaultMealOn: boolean; updatedDays: number },
