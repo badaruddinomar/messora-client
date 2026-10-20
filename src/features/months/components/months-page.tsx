@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarClock, CalendarRange, Info, UserRound } from "lucide-react";
+import Link from "next/link";
+import { CalendarClock, CalendarRange, ChevronRight, Info, UserRound } from "lucide-react";
+import { messRoutes } from "@/constants/routes";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
 import { PageHeader } from "@/components/common/page-header";
@@ -23,6 +25,7 @@ import { MonthStatusBadge } from "./month-status-badge";
 
 export function MonthsPage() {
   const mess = useCurrentMess();
+  const { canManage } = useMessPermissions();
   const { data: months, isLoading, error, refetch, isFetching } = useMonthsQuery(mess.id);
 
   const current = months?.find((m) => m.isCurrent);
@@ -59,8 +62,17 @@ export function MonthsPage() {
               <AlertDescription className="text-current/80">
                 You can still add late bazar and deposits to {waiting.length === 1 ? "it" : "them"}. Close{" "}
                 {waiting.length === 1 ? "it" : "them, oldest first,"} once everything is in, so the bills are
-                final. Closing comes with month summaries in an upcoming update.
+                final.
               </AlertDescription>
+              <div className="col-start-2 mt-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href={messRoutes(mess.slug).month(waiting[0].id)}>
+                    {canManage
+                      ? `Review & close ${monthLabel(waiting[0])}`
+                      : `View ${monthLabel(waiting[0])}`}
+                  </Link>
+                </Button>
+              </div>
             </Alert>
           )}
 
@@ -99,6 +111,7 @@ export function MonthsPage() {
 }
 
 function CurrentMonthCard({ month }: { month: Month }) {
+  const mess = useCurrentMess();
   const left = daysLeft(month);
   const progress = Math.round(monthProgress(month) * 100);
 
@@ -121,18 +134,33 @@ function CurrentMonthCard({ month }: { month: Month }) {
           </div>
           <Progress value={progress} aria-label={`${progress}% of the month has passed`} />
         </div>
-        <ManagerLine month={month} />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex-1">
+            <ManagerLine month={month} />
+          </div>
+          <Button asChild variant="outline">
+            <Link href={messRoutes(mess.slug).month(month.id)}>
+              Open month <ChevronRight aria-hidden />
+            </Link>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
 }
 
 function MonthRow({ month }: { month: Month }) {
+  const mess = useCurrentMess();
   return (
     <li className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="font-medium">{monthLabel(month)}</p>
+          <Link
+            href={messRoutes(mess.slug).month(month.id)}
+            className="font-medium underline-offset-4 hover:underline focus-visible:underline"
+          >
+            {monthLabel(month)}
+          </Link>
           <MonthStatusBadge month={month} />
         </div>
         <p className="text-sm text-muted-foreground">{formatPeriod(month)}</p>

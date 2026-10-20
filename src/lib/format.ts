@@ -44,6 +44,9 @@ export function formatMoney(value: Numeric, { compact = false }: { compact?: boo
   return (compact ? moneyFormatCompact : moneyFormat).format(asIntlValue(value));
 }
 
+/** Money where a negative amount is a plain minus (cash in hand), with a real minus sign: "−৳200.00". */
+export const formatSignedMoney = (value: Numeric) => `${isNegative(value) ? "−" : ""}${formatMoney(value)}`;
+
 const countFormat = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2 });
 
 /** Meal counts and other quantities: up to 2 decimals, trailing zeros dropped (`2.5`, `3`). */

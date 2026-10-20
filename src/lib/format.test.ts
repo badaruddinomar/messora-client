@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { formatCount, formatDate, formatDay, formatMoney, initials, isNegative, isZero } from "./format";
+import {
+  formatCount,
+  formatDate,
+  formatDay,
+  formatMoney,
+  formatSignedMoney,
+  initials,
+  isNegative,
+  isZero,
+} from "./format";
 
 describe("formatMoney", () => {
   it("formats decimal strings exactly, with ৳ and lakh grouping", () => {
@@ -19,6 +28,13 @@ describe("formatMoney", () => {
 
   it("doesn't lose precision on large values", () => {
     expect(formatMoney("12345678901.23")).toBe("৳12,34,56,78,901.23");
+  });
+});
+
+describe("formatSignedMoney", () => {
+  it("keeps the sign for amounts that are plainly negative, like cash in hand", () => {
+    expect(formatSignedMoney("-200")).toBe("−৳200.00");
+    expect(formatSignedMoney("200")).toBe("৳200.00");
   });
 });
 

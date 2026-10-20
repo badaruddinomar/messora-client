@@ -42,7 +42,12 @@ export type ApiErrorCode =
   | "NOT_EDITABLE"
   | "DUPLICATE_TRANSACTION"
   | "SHARES_MISMATCH"
-  | "SALARY_ALREADY_PAID";
+  | "SALARY_ALREADY_PAID"
+  | "MONTH_NOT_ENDED"
+  | "PENDING_ENTRIES"
+  | "VERSION_CONFLICT"
+  | "BALANCE_CARRIED_OVER"
+  | "OVERPAYMENT";
 
 export interface ApiErrorBody {
   success: false;

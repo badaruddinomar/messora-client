@@ -28,6 +28,7 @@ import { EmailVerificationBanner } from "@/features/auth/components/email-verifi
 import { TodaysMealsCard } from "@/features/meals/components/todays-meals-card";
 import { InviteDialog } from "@/features/invitations/components/invite-dialog";
 import { useMembersQuery } from "@/features/members/members-api";
+import { DueBanner } from "@/features/months/components/due-banner";
 import { BalancePreviewCard } from "@/features/months/components/balance-preview-card";
 import { useMonthsQuery } from "@/features/months/months-api";
 import { daysLeft } from "@/features/months/utils";
@@ -37,7 +38,7 @@ import { JoinCodeCard } from "./join-code-card";
 
 const COMING_NEXT = [
   { icon: ReceiptText, title: "Reports", text: "Charts of spending, meals and dues over time." },
-  { icon: Wallet, title: "Closing the month", text: "Final bills, dues, refunds and the fund handover." },
+  { icon: Wallet, title: "Your dashboard", text: "Spending trends and your history at a glance." },
   { icon: MessageCircle, title: "Chat & notices", text: "Talk to the mess and pin announcements." },
 ];
 
@@ -89,6 +90,7 @@ export function MessOverview() {
 
       <EmailVerificationBanner />
       <DutyTodayBanner />
+      <DueBanner />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
         <StatCard

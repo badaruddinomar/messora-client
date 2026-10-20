@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertTriangle, Users } from "lucide-react";
 import { DataTable } from "@/components/common/data-table";
@@ -10,6 +11,7 @@ import { UserAvatar } from "@/components/common/user-avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { messRoutes } from "@/constants/routes";
 import { useCurrentMess, useMessPermissions } from "@/features/messes/mess-context";
 import { formatCount, formatMoney } from "@/lib/format";
 import { sumMoney } from "@/lib/money";
@@ -73,6 +75,7 @@ const columns: ColumnDef<MonthPreviewRow, unknown>[] = [
 export function MonthSummary({ month }: { month: Month }) {
   const mess = useCurrentMess();
   const { canManage } = useMessPermissions();
+  const router = useRouter();
   const { data, isLoading } = useMonthPreviewQuery({ messId: mess.id, monthId: month.id });
   const pending = data ? data.pending.bazars.count + data.pending.deposits.count : 0;
 
@@ -98,7 +101,7 @@ export function MonthSummary({ month }: { month: Month }) {
               <StatCard
                 label="Cash in hand"
                 value={<MoneyText value={data.cash.closingCash} compact />}
-                helper="Deposits minus mess-fund bazar"
+                helper={data.isFinal ? "At closing" : "Deposits minus what the fund paid"}
               />
             </>
           ) : (
@@ -122,6 +125,9 @@ export function MonthSummary({ month }: { month: Month }) {
           data={data?.members}
           isLoading={isLoading}
           getRowId={(r) => r.member.id}
+          onRowClick={(r) =>
+            (canManage || r.member.isYou) && router.push(messRoutes(mess.slug).bill(month.id, r.member.id))
+          }
           empty={<EmptyState icon={Users} title="Nobody in the mess this month" />}
           renderCard={(row) => {
             const r = row.original;
